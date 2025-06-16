@@ -9,7 +9,7 @@
 #include <istream>
 #include <vector>
 #include <string>
-#include <cstudio>
+#include <cstdio>
 
 #include "inputbuf.h"
 

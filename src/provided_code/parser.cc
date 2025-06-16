@@ -64,6 +64,7 @@ int Parser::to_int(const string &s) {
 
 // forward declarations are provided in parser.h
 
+
 // ----- parsing helpers -----
 void Parser::parse_tasks_section() {
     expect(TASKS);
@@ -390,6 +391,140 @@ void Parser::check_semantics() {
     }
 }
 
+
+// ----- semantic checks -----
+void Parser::check_semantics() {
+    if (!error1_lines.empty()) {
+        sort(error1_lines.begin(), error1_lines.end());
+        cout << "Semantic Error Code 1:";
+        for (int ln : error1_lines) cout << " " << ln;
+        cout << "\n";
+        exit(0);
+    }
+    if (!error2_lines.empty()) {
+        sort(error2_lines.begin(), error2_lines.end());
+        cout << "Semantic Error Code 2:";
+        for (int ln : error2_lines) cout << " " << ln;
+        cout << "\n";
+        exit(0);
+    }
+    vector<int> error3, error4;
+    for (const EvalInfo &e : eval_calls) {
+        if (poly_map.find(e.name) == poly_map.end()) {
+            error3.push_back(e.line_no);
+        } else {
+            Polynomial *p = &polys[poly_map[e.name]];
+            int expected = p->params.empty() ? 1 : (int)p->params.size();
+            if (e.arg_count != expected) error4.push_back(e.line_no);
+        }
+    }
+    if (!error3.empty()) {
+        sort(error3.begin(), error3.end());
+        cout << "Semantic Error Code 3:";
+        for (int ln : error3) cout << " " << ln;
+        cout << "\n";
+        exit(0);
+    }
+    if (!error4.empty()) {
+        sort(error4.begin(), error4.end());
+        cout << "Semantic Error Code 4:";
+        for (int ln : error4) cout << " " << ln;
+        cout << "\n";
+        exit(0);
+    }
+}
+
+// ----- warning checks -----
+static void collect_uninit(Expr* e, const std::set<std::string>& defined,
+                           std::vector<int>& lines) {
+    if (!e) return;
+    if (e->type == Expr::VAR) {
+        if (defined.find(e->name) == defined.end()) {
+            lines.push_back(e->line_no);
+        }
+    }
+    for (Expr* c : e->args) {
+        collect_uninit(c, defined, lines);
+    }
+}
+
+void Parser::check_warning1() {
+    std::set<std::string> defined;
+    for (const Statement &s : stmts) {
+        if (s.type == Statement::INPUT_STMT) {
+            defined.insert(s.var);
+        } else if (s.type == Statement::ASSIGN_STMT) {
+            collect_uninit(s.expr, defined, warn1_lines);
+            defined.insert(s.var);
+        }
+    }
+    if (!warn1_lines.empty()) {
+        sort(warn1_lines.begin(), warn1_lines.end());
+        cout << "Warning Code 1:";
+        for (int ln : warn1_lines) cout << " " << ln;
+        cout << "\n";
+    }
+}
+
+static void collect_used(Expr* e, std::set<std::string>& used) {
+    if (!e) return;
+    if (e->type == Expr::VAR) {
+        used.insert(e->name);
+    }
+    for (Expr* c : e->args) {
+        collect_used(c, used);
+    }
+}
+
+void Parser::check_warning2() {
+    std::set<std::string> live;
+    for (int i = (int)stmts.size() - 1; i >= 0; i--) {
+        const Statement &s = stmts[i];
+        if (s.type == Statement::OUTPUT_STMT) {
+            live.insert(s.var);
+        } else if (s.type == Statement::ASSIGN_STMT) {
+            if (live.find(s.var) == live.end()) {
+                warn2_lines.push_back(s.line_no);
+            }
+            live.erase(s.var);
+            collect_used(s.expr, live);
+        } else if (s.type == Statement::INPUT_STMT) {
+            live.erase(s.var);
+        }
+    }
+    if (!warn2_lines.empty()) {
+        sort(warn2_lines.begin(), warn2_lines.end());
+        cout << "Warning Code 2:";
+        for (int ln : warn2_lines) cout << " " << ln;
+        cout << "\n";
+    }
+}
+
+// ----- degree computation -----
+int Parser::degree_expr(Expr* e) {
+    switch (e->type) {
+        case Expr::NUM:
+            return 0;
+        case Expr::VAR:
+            return 1;
+        case Expr::ADD:
+        case Expr::SUB:
+            return max(degree_expr(e->args[0]), degree_expr(e->args[1]));
+        case Expr::MUL:
+            return degree_expr(e->args[0]) + degree_expr(e->args[1]);
+        case Expr::POW:
+            return degree_expr(e->args[0]) * e->value;
+        default:
+            return 0;
+    }
+}
+
+void Parser::print_degrees() {
+    for (const Polynomial &p : polys) {
+        cout << p.name << ": " << degree_expr(p.body) << "\n";
+    }
+}
+
 // ----- driver -----
 void Parser::Run() {
     parse_tasks_section();
@@ -397,12 +532,17 @@ void Parser::Run() {
     parse_execute_section();
     parse_inputs_section();
     check_semantics();
-    // run task 2 if requested
-    bool t2 = false;
-    for (int t : tasks) if (t == 2) t2 = true;
-    if (t2) {
-        execute_program();
+    bool t2=false, t3=false, t4=false, t5=false;
+    for (int t : tasks) {
+        if (t==2) t2=true;
+        if (t==3) t3=true;
+        if (t==4) t4=true;
+        if (t==5) t5=true;
     }
+    if (t2) execute_program();
+    if (t3) check_warning1();
+    if (t4) check_warning2();
+    if (t5) print_degrees();
 }
 
 int main() {

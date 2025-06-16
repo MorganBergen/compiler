@@ -46,6 +46,11 @@ class Parser {
         int eval_expr(Expr* e, std::map<std::string,int>& env);
         void execute_program();
         void check_semantics();
+        void check_warning1();
+        void check_warning2();
+        int degree_expr(Expr* e);
+        void print_degrees();
+
 
         // program data
         std::vector<int> tasks;
@@ -53,10 +58,18 @@ class Parser {
         std::vector<Statement> stmts;
         std::vector<int> inputs;
 
+
+        std::map<std::string, size_t> poly_map;
+
         std::map<std::string, Polynomial*> poly_map;
+
         std::vector<int> error1_lines;
         std::vector<int> error2_lines;
         std::vector<EvalInfo> eval_calls;
+
+
+        std::vector<int> warn1_lines;
+        std::vector<int> warn2_lines;
 
         std::vector<std::string> current_poly_vars;
         int current_poly_line = 0;

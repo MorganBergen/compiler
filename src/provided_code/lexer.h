@@ -1,0 +1,55 @@
+
+/**
+ * @file        lexer.h
+ * @date        sun june 15 2025
+ * @brief
+ */
+
+#ifndef __LEXER__H__
+#define __LEXER__H__
+
+#include <vector>
+#include <string>
+
+#include "inputbuf.h"
+
+// ------------------- token types --------------
+
+typedef enum {
+    END_OF_FILE = 0,
+    POLY, INPUT, TASKS, EXECUTE, OUTPUT, INPUTS,
+    EQUAL, LPAREN,
+    RPAREN, ID, COMMA, POWER, NUM,
+    PLUS, MINUS, SEMICOLON, ERROR,
+} TokenType;
+
+class Token {
+    public:
+        void Print();
+        std::string lexeme;
+        TokenType token_type;
+        int line_no;
+};
+
+class LexicalAnalyzer {
+    public:
+        Token GetToken();
+        Token peek(int);
+        LexicalAnalyzer();
+
+    private:
+        std::vector<Token> tokenList;
+        Token GetTokenMain();
+        int line_no;
+        int index;
+        Token tmp;
+        InputBuffer input;
+
+        bool SkipSpace();
+        bool IsKeyword(std::string);
+        TokenType FindKeywordIndex(std::string);
+        Token ScanNumber();
+        Token ScanIdOrKeyword();
+};
+
+#endif // __LEXER__H__

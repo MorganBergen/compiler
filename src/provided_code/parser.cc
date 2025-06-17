@@ -1,7 +1,7 @@
 /**
  * @file        parser.cc
  * @date        sun june 15 2025
- * @brief       Simple polynomial language parser and evaluator
+ * @brief       simple polynomial language parser
  */
 
 #include <iostream>
@@ -39,6 +39,9 @@ struct Statement {
     int line_no = 0;
 };
 
+/**
+ * @
+ */
 struct EvalInfo {                  // for semantic checks on calls
     string name;
     int arg_count = 0;
@@ -359,7 +362,6 @@ void Parser::execute_program() {
     }
 }
 
-// ----- semantic checks -----
 void Parser::check_semantics() {
     if (!error1_lines.empty()) {
         sort(error1_lines.begin(), error1_lines.end());
@@ -492,19 +494,24 @@ void Parser::print_degrees() {
     }
 }
 
-// ----- driver -----
 void Parser::Run() {
+
+    //  parse each section of input
     parse_tasks_section();
     parse_poly_section();
     parse_execute_section();
     parse_inputs_section();
+
+    //  perform semantic checks and exit on error
     check_semantics();
+
+    //  determine which tasks to execute based on teh parsed 'tasks' list
     bool t2=false, t3=false, t4=false, t5=false;
     for (int t : tasks) {
-        if (t==2) t2=true;
-        if (t==3) t3=true;
-        if (t==4) t4=true;
-        if (t==5) t5=true;
+        if (t==2) t2=true;  //  task 2 - execute program
+        if (t==3) t3=true;  //  task 3 - check warning 1 (unitialized variables)
+        if (t==4) t4=true;  //  task 4 - check warning 2 (unused variables)
+        if (t==5) t5=true;  //  task 5 - print polynomial degrees
     }
     if (t2) execute_program();
     if (t3) check_warning1();

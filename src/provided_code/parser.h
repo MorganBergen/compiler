@@ -1,8 +1,8 @@
 /**
  * @file       parser.h
  * @date       sun june 15 2025
- * @brief
- */
+ * @brief      header file for parser
+*/
 
 #ifndef __PARSER_H__
 #define __PARSER_H__
@@ -19,7 +19,17 @@ struct EvalInfo;
 
 class Parser {
     public:
+        /**
+         * @brief       runs the parser and processes the input
+         * @details     main entry point for parsing and program execution
+         *              executes the full parsing and evaluation pipeline
+         */
         void Run();
+
+        /**
+         * @brief       lexical analyzer for tokenizing the input
+         * @details     used internally by the parser to obtain tokens from the input stream
+         */
         LexicalAnalyzer lexer;
 
     private:
@@ -50,6 +60,7 @@ class Parser {
         void check_warning2();
         int degree_expr(Expr* e);
         void print_degrees();
+
         // program data
         std::vector<int> tasks;
         std::vector<Polynomial> polys;

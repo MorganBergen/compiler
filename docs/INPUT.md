@@ -19,3 +19,5 @@ poly_header -> poly_name LPAREN id_list RPAREN
 `poly_decl`, `poly_header`, `poly_body`, `id_list` are non terminals
 `EQUAL`, `SEMICOLON`, `LPAREN`, `RPAREN`, are terminals (actual tokens)
 the grammar clearly defines how a polynomial declaration must appear
+
+how cfg connects to the recrusive descent parser

@@ -14,38 +14,12 @@ the input to your compiler has four parts
 
 your compiler will parse the input and produces a syntax error message if there is a syntax error.  if there is no syntax error, your compiler will analyze semantic errors.  if there are no synatx and no semantic errors, your compiler will perform other semantic analyses if so specified by the tasks numbers in the `TASKS` section.  if required, it will also execute the `EXECUTE` section and produces the output that should be produces by the `OUTPUT` statement.
 
-Here is a mermaid flowchart diagram that illustrates the structure of the compiler input and its processing:
-
-```mermaid
-flowchart LR
-    A[Input] --> B[part 1]
-    A --> C[part 2]
-    A --> D[part 3]
-    A --> E[part 4]
-
-    B --> B1[TASKS]
-    C --> C1[POLY]
-    D --> D1[EXECUTE]
-    E --> E1[INPUTS]
-
-    B1 --> Compiler
-    C1 --> Compiler
-    D1 --> Compiler
-    E1 --> Compiler
-
-    Compiler --> G[output]
-```
-
-
 the remainder of this readme is organized as follows
 
 1.  the second section describes the input format
 2.  the third section describes the expected output when the syntax or semantics are not correct
 3.  the fourth section describes the output when the program syntax and semantics are correct
 4.  the fifth section describes the requirements for your solution
-
-
-
 
 2.  input format
 
@@ -1751,4 +1725,3 @@ should work on figuring out.
 * In a real compiler, procedures are not executed recursively. They are executed
 iteratively. Also, they have parameters. This makes procedure execution significantly
 more involved than what we are able to do in a first project.
-

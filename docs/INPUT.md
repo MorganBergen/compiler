@@ -129,3 +129,21 @@ parse_program()
     parse_inputs_section()
         expect(INPUTS), parse_num_list()
 ```
+
+####  grammar explained step by step
+
+
+```
+ 1 -> | TASKS             |
+ 2    |   1 2             |
+ 3    | POLY              |
+ 4    |   F = x^2 + 1;    |
+ 5    |   G = x + 1;      |
+ 6    | EXECUTE           |
+ 7    |   X = F(4);       |
+ 8    |   Y = G(2);       |
+ 9    |   OUTPUT X;       |
+10    |   OUTPUT Y;       |
+11    | INPUTS            |
+12    |   1 2 3 18 19     |
+```

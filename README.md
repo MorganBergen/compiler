@@ -2,7 +2,8 @@
 
 ####  contents
 
-[introduction](#introduction)
+1.  [introduction](<README# introduction>)
+2.  [input format](<README# input format>)
 
 ###  introduction
 
@@ -107,12 +108,25 @@ the parser will use the functions provided to `peek()` at tokens or `expect()` t
 
 to use the provided methods, first instantiate only one lexer object of the class `LexicalAnalyzer` and call the methods on this instance.
 
-what you need to do is write a parser to parse the input according to the context free grammar and produce a syntax error
+what you need to do is write a parser to parse the input according to the context free grammar and produce a syntax error.  your program will check for semantic errors, and depending on the tasks list, will execute more semantic checks.  to achieve that, your parser will store the program in appropriate data structures that facilitate semantic analysis and allow your compiler to execute the statement lists in the `execute_section`.  for now don't worry how that is achieved, we will explain in more detail in the implementation guide.
+
+
+
+
+
 
 ###  output if syntax or semantic erros exist
 
 
 ###  output if syntax or semantics are correct
+
+
+
+
+
+
+
+
 
 <<<<<<< HEAD
 17

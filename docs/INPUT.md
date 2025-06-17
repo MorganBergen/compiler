@@ -21,3 +21,111 @@ poly_header -> poly_name LPAREN id_list RPAREN
 the grammar clearly defines how a polynomial declaration must appear
 
 how cfg connects to the recrusive descent parser
+
+a recursive descent parser implements a cfg by having one parsing function per non terminal in your grammar
+
+example implementation
+
+the function to parser a `poly_decl` might look like this
+
+```c++
+void parse_poly_decl() {
+  parse_poly_header();    //  calls the parser for poly_header
+  expect(EQUAL);          //  expects an '=' token
+  parse_poly_body();      //  calls the parser for poly_body
+  expect(SEMICOLON);      //expects a ';' token
+}
+```
+
+each grammar rule corresponds to such a parsing function
+the parser checks syntax correctness by ensuring tokens match expected patterns
+
+`lexer`
+
+defines `LexicalAnalyzer` class with methods
+
+`GetToken()` returns next token
+`peek()` looks ahead without consuming tokens
+`expect()` checks and consumes expected token
+
+`inputbuf`
+
+handles input buffering and tokenization details
+
+`parser`
+
+skeleton to implement your recursive descent parser.  it calls lexer functions to read tokens
+
+cfg rules -> guide implementation in `parser.cc`
+
+lexer functions `GetToken()`, `peek()`, `expect()` -> used by your parser functions to recognize terminals
+
+###  project implementation overview
+
+**parsing**
+
+-  create a parsing function for each non terminal in your context free grammar
+-  use provided lexer methods `peek`, `expect` to check token types
+
+**semantic checking**
+
+-  check polynomial declarations for semantic correctness
+-  duplicate polynomial names
+-  undeclared variables
+-  incorrect polynomial evaluations (wrong number of arguments, undeclared polynomials)
+
+**semantic warnings**
+
+-  warnings for uninitialized variables
+-  warnings for useless assignments
+
+**execution**
+
+-  represent polynomials in a data structure
+-  allocate memory for variables
+-  execute the program represented in your data structure
+
+###  data structures needed
+
+1.  **symbol table**  -  maps variables / polynomials to memory locations
+2.  **ast** **(abstract syntax tree)** -  represents parsed program statements (especially polynomials and assignments) to execute later
+2.  **vector/list** **for INPUTS** -  holds integers read from the `INPUTS` section
+
+###  example to understand parsing flow
+
+consider an input
+
+```
+TASKS
+  1 2
+POLY
+  F = x^2 + 1;
+EXECUTE
+  INPUT X;
+  Y = F(X);
+  OUTPUT Y;
+INPUTS
+  3
+```
+
+parsing flow
+
+```
+parse_program()
+    parse_tasts_section()
+        expect(TASKS), parse_num_list()
+    parse_poly_section()
+        expect(POLY), parse_poly_decl_list()
+            parse_poly_decl()
+                parse_poly_header()
+                expect(EQUAL)
+                parse_poly_body()
+                expect(SEMICOLON)
+    parse_execute_section()
+        expect(EXECUTE), parse_statement_list()
+            parse_input_statement()
+            parse_assign_statement()
+            parse_output_statement()
+    parse_inputs_section()
+        expect(INPUTS), parse_num_list()
+```

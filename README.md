@@ -881,6 +881,7 @@ This will create a directory called tests
 • Store the test1.sh script in your project directory as well
 • Make the script executable: bash $ chmod +x test1.sh
 • Compile your program. The test script assumes your executable is called a.out
+• Example compile command: `g++ -std=c++11 provided_code/inputbuf.cc provided_code/lexer.cc provided_code/parser.cc -o a.out`
 • Run the script to test your code: bash $ ./test1.sh
 
 The output of the script should be self explanatory. To test your code after you make changes, you will just perform the last two steps (compile and run test1.sh).

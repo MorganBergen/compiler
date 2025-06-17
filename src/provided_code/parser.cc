@@ -380,51 +380,6 @@ void Parser::check_semantics() {
         if (poly_map.find(e.name) == poly_map.end()) {
             error3.push_back(e.line_no);
         } else {
-<<<<<<< HEAD
-=======
-            int expected = poly_map[e.name]->params.empty() ? 1 : (int)poly_map[e.name]->params.size();
-            if (e.arg_count != expected) error4.push_back(e.line_no);
-        }
-    }
-    if (!error3.empty()) {
-        sort(error3.begin(), error3.end());
-        cout << "Semantic Error Code 3:";
-        for (int ln : error3) cout << " " << ln;
-        cout << "\n";
-        exit(0);
-    }
-    if (!error4.empty()) {
-        sort(error4.begin(), error4.end());
-        cout << "Semantic Error Code 4:";
-        for (int ln : error4) cout << " " << ln;
-        cout << "\n";
-        exit(0);
-    }
-}
-
-
-// ----- semantic checks -----
-void Parser::check_semantics() {
-    if (!error1_lines.empty()) {
-        sort(error1_lines.begin(), error1_lines.end());
-        cout << "Semantic Error Code 1:";
-        for (int ln : error1_lines) cout << " " << ln;
-        cout << "\n";
-        exit(0);
-    }
-    if (!error2_lines.empty()) {
-        sort(error2_lines.begin(), error2_lines.end());
-        cout << "Semantic Error Code 2:";
-        for (int ln : error2_lines) cout << " " << ln;
-        cout << "\n";
-        exit(0);
-    }
-    vector<int> error3, error4;
-    for (const EvalInfo &e : eval_calls) {
-        if (poly_map.find(e.name) == poly_map.end()) {
-            error3.push_back(e.line_no);
-        } else {
->>>>>>> main
             Polynomial *p = &polys[poly_map[e.name]];
             int expected = p->params.empty() ? 1 : (int)p->params.size();
             if (e.arg_count != expected) error4.push_back(e.line_no);

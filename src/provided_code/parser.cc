@@ -10,7 +10,10 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
+<<<<<<< HEAD
 #include <set>
+=======
+>>>>>>> main
 #include "parser.h"
 
 using namespace std;
@@ -65,6 +68,10 @@ int Parser::to_int(const string &s) {
 
 // forward declarations are provided in parser.h
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
 // ----- parsing helpers -----
 void Parser::parse_tasks_section() {
     expect(TASKS);
@@ -105,7 +112,11 @@ void Parser::parse_poly_section() {
         p.body = term_list();
         expect(SEMICOLON);
         polys.push_back(p);
+<<<<<<< HEAD
         poly_map[p.name] = polys.size() - 1;
+=======
+        poly_map[p.name] = &polys.back();
+>>>>>>> main
         current_poly_vars.clear();
         current_poly_line = 0;
         t = lexer.peek(1);
@@ -115,9 +126,12 @@ void Parser::parse_poly_section() {
 void Parser::parse_execute_section() {
     expect(EXECUTE);
     Token t = lexer.peek(1);
+<<<<<<< HEAD
     if (!(t.token_type == INPUT || t.token_type == OUTPUT || t.token_type == ID)) {
         syntax_error();
     }
+=======
+>>>>>>> main
     while (t.token_type == INPUT || t.token_type == OUTPUT || t.token_type == ID) {
         Statement s;
         if (t.token_type == INPUT) {
@@ -283,6 +297,7 @@ Expr* Parser::poly_evaluation() {
 
 Expr* Parser::argument() {
     Token t1 = lexer.peek(1);
+<<<<<<< HEAD
     if (t1.token_type == NUM) {
         Token num = expect(NUM);
         Expr* node = new Expr(Expr::NUM);
@@ -290,6 +305,8 @@ Expr* Parser::argument() {
         node->line_no = num.line_no;
         return node;
     }
+=======
+>>>>>>> main
     if (t1.token_type != ID) {
         syntax_error();
     }
@@ -326,7 +343,11 @@ int Parser::eval_expr(Expr* e, map<string,int>& env) {
         }
         case Expr::CALL: {
             if (poly_map.find(e->name) == poly_map.end()) return 0;
+<<<<<<< HEAD
             Polynomial *p = &polys[poly_map[e->name]];
+=======
+            Polynomial *p = poly_map[e->name];
+>>>>>>> main
             map<string,int> newEnv;
             if (p->params.empty()) {
                 newEnv["x"] = eval_expr(e->args[0], env);
@@ -381,6 +402,51 @@ void Parser::check_semantics() {
         if (poly_map.find(e.name) == poly_map.end()) {
             error3.push_back(e.line_no);
         } else {
+<<<<<<< HEAD
+=======
+            int expected = poly_map[e.name]->params.empty() ? 1 : (int)poly_map[e.name]->params.size();
+            if (e.arg_count != expected) error4.push_back(e.line_no);
+        }
+    }
+    if (!error3.empty()) {
+        sort(error3.begin(), error3.end());
+        cout << "Semantic Error Code 3:";
+        for (int ln : error3) cout << " " << ln;
+        cout << "\n";
+        exit(0);
+    }
+    if (!error4.empty()) {
+        sort(error4.begin(), error4.end());
+        cout << "Semantic Error Code 4:";
+        for (int ln : error4) cout << " " << ln;
+        cout << "\n";
+        exit(0);
+    }
+}
+
+
+// ----- semantic checks -----
+void Parser::check_semantics() {
+    if (!error1_lines.empty()) {
+        sort(error1_lines.begin(), error1_lines.end());
+        cout << "Semantic Error Code 1:";
+        for (int ln : error1_lines) cout << " " << ln;
+        cout << "\n";
+        exit(0);
+    }
+    if (!error2_lines.empty()) {
+        sort(error2_lines.begin(), error2_lines.end());
+        cout << "Semantic Error Code 2:";
+        for (int ln : error2_lines) cout << " " << ln;
+        cout << "\n";
+        exit(0);
+    }
+    vector<int> error3, error4;
+    for (const EvalInfo &e : eval_calls) {
+        if (poly_map.find(e.name) == poly_map.end()) {
+            error3.push_back(e.line_no);
+        } else {
+>>>>>>> main
             Polynomial *p = &polys[poly_map[e.name]];
             int expected = p->params.empty() ? 1 : (int)p->params.size();
             if (e.arg_count != expected) error4.push_back(e.line_no);

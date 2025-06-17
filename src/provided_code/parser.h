@@ -51,17 +51,33 @@ class Parser {
         int degree_expr(Expr* e);
         void print_degrees();
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
         // program data
         std::vector<int> tasks;
         std::vector<Polynomial> polys;
         std::vector<Statement> stmts;
         std::vector<int> inputs;
 
+<<<<<<< HEAD
         std::map<std::string, size_t> poly_map;
+=======
+
+        std::map<std::string, size_t> poly_map;
+
+        std::map<std::string, Polynomial*> poly_map;
+
+>>>>>>> main
         std::vector<int> error1_lines;
         std::vector<int> error2_lines;
         std::vector<EvalInfo> eval_calls;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
         std::vector<int> warn1_lines;
         std::vector<int> warn2_lines;
 

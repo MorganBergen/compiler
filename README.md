@@ -1,63 +1,37 @@
-# compiler
+#  simple compiler
 
-1.  introduction
+####  contents
 
-the goal of this project is to implement a simple compiler for a simple programming language.
-to implement this simple compiler, you will write a recusive-decent parser and use some simple data structures to implement semantic checking and execute the program.
+[introduction](#introduction)
 
-the input to your compiler has four parts
+###  introduction
 
-1.  `TASKS` section -  it contains a list of one or more numbers of tasks to be executed by the compiler
-2.  `POLY` section -  it contains a list of polynomial declarations
-3.  `EXECUTE` section -  it contains a secquence of `INPUT`, `OUTPUT` and assignment statements
-4.  `INPUTS` section - it contains a sequence of integers that will be used as the input to `INPUT` statement in the `EXECUTE` section.
+a simple compiler using a recursive descent parser along with simple data structures for semantic checking and program execution.
 
-your compiler will parse the input and produces a syntax error message if there is a syntax error.  if there is no syntax error, your compiler will analyze semantic errors.  if there are no synatx and no semantic errors, your compiler will perform other semantic analyses if so specified by the tasks numbers in the `TASKS` section.  if required, it will also execute the `EXECUTE` section and produces the output that should be produces by the `OUTPUT` statement.
+**compiler input**
+
+1.  `TASKS` section - contains a list of one or more numbers of tasks to be executed by the compiler
+2.  `POLY` section -  contains a list of polynomial declarations
+3.  `EXECUTE` section - contains a sequence of `INPUT`, `OUTPUT`, and assignment statements
+4.  `INPUTS` section - contains a sequence of integers used as inputs for the `EXECUTE` section
+
+**compiler behavior**
+
+1.  parse input
+2.  if syntax error exists, produce synatx error message
+3.  if syntax is correct, perform semantic analysis
+4.  if semantic errors exist, produce semantic error messages
+5.  if syntax and semantics are correct, performa additional semantic analysis based on specified tasks
+6.  execute the statements in the `EXECUTE` section
+7.  generate output for `OUTPUT` statements
+
+###  input format
+
+**grammar and tokens**
+
+the input of the program is specified by the following context free grammar
 
 ```
-input to compiler -> part 1:  tasks to be executed                        -> compiler -> -10 -192
-                     part 2:  polynomials definitions                     ->
-                     part 3:  statements to execute                       ->
-                     part 4:  inputs to be used by the INPUTS statements  ->
-
-part 1: tasks to be executed
-TASKS
-  1
-
-part 2:  polynomials definitions
-POLY
-  F = x^2 + x + 1;
-  G(x, y) = 2(x + y)(x - y);
-
-part 3: statement to execute
-EXECUTE
-  INPUT w;
-  INPUT z;
-  z = G(w, z);
-  w = G(w, z);
-  OUTPUT w;
-  OUTPUT z;
-
-part 4:  inputs to be used by the INPUTS statements
-INPUTS
-  2 3
-```
-
-the remainder of this readme is organized as follows
-
-1.  the second section describes the input format
-2.  the third section describes the expected output when the syntax or semantics are not correct
-3.  the fourth section describes the output when the program syntax and semantics are correct
-4.  the fifth section describes the requirements for your solution
-
-
-2.  input format
-
-2.1  grammar and tokens
-
-the input of your program is specified by the following context-free grammar
-
-```grammar
 program -> tasks_sectionpoly_sectionexecute_sectioninputs_section
 tasks_section -> TASKSnum_list
 num_list -> NUM
@@ -101,11 +75,7 @@ argument -> poly_evaluation
 inputs_section -> INPUTSnum_list
 ```
 
-the code provided has a class `LexicalAnalyzer` with methods `GetToken()` and `peek()`.  also, an `expect()` function is provided.  your parser will use teh functions provide to `peek()` at tokens or `expect()` tokens as needed.  you must not change the provided functions.  do not modify files `inputbuf.cc`, `inputbuff.h`, `lexer.cc`, `lexer.h`.
-
-to use the provided methods, you should first instantiate a lexer object of the class `LexicalAnalyzer` and call the methods on this instance.  you should only instantiate one lexer object.  if you try to instantiate more than one, this will result in errors.
-
-the definitions of the tokens is given below for completeness
+**definition of tokens**
 
 ```
 char        = a | b | ... | z | A | B | ... | Z | 0 | 1 | ... | 192
@@ -131,34 +101,20 @@ NUM         = 0 | pdigit . digit*
 ID          = letter . char*
 ```
 
-what you need to do is write a parser to parse the input according to the grammar and produce a synatx error message if tehre is a syntax error.  your program will also check for semantic errors, and depending on the tasks list, will execute more semantic checks.  to achieve that, your parser will store the program in approriate data structures that facilitate semantic analysis and allow your compiler to execute the statement list in the `execute_section`.
+the code provided has a class `LexicalAnalyzer` with methods `GetToken()`, `peek()`, and `expect()`.
 
-2.2  examples
+the parser will use the functions provided to `peek()` at tokens or `expect()` tokens as needed.  do not change any functions provided in `inputbuf.cc`, `inputbuf.h`, `lexer.cc`, `lexer.h`
 
-the following are examples of input to your compiler with corresponding outputs.  the output will be explained in more detail in later sections.  each of these examples has task numbers 1 and 2 listed in the `tasks_section`.  they have the following meanings:
+to use the provided methods, first instantiate only one lexer object of the class `LexicalAnalyzer` and call the methods on this instance.
 
--  the number 1 listed means that your program should perform syntax and semantic checking
--  the number 2 listed means that your program should produce the output of the output statements if there are no syntax and no semantic error.
+what you need to do is write a parser to parse the input according to the context free grammar and produce a syntax error
 
-EXAMPLE 1
+###  output if syntax or semantic erros exist
 
-```
-TASKS
-  1 2
-POLY
-  F = x^2 + 1;
-  G = x + 1;
-EXECUTE
-  X = F(4); Y =
-  G(2);
-  OUTPUT X;
-  OUTPUT Y;
-INPUTS
-  1 2 3 18 19
-```
 
-this example shows two polynomial declarations and a EXECUTE section section in which the polynomials are evaulated with arguments 4 and 2 respectively.  the output of the program will be
+###  output if syntax or semantics are correct
 
+<<<<<<< HEAD
 17
 3
 
@@ -885,3 +841,6 @@ This will create a directory called tests
 • Run the script to test your code: bash $ ./test1.sh
 
 The output of the script should be self explanatory. To test your code after you make changes, you will just perform the last two steps (compile and run test1.sh).
+=======
+###  requirements for solution
+>>>>>>> main

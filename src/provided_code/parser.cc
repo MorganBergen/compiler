@@ -10,10 +10,7 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
-<<<<<<< HEAD
 #include <set>
-=======
->>>>>>> main
 #include "parser.h"
 
 using namespace std;
@@ -67,11 +64,6 @@ int Parser::to_int(const string &s) {
 }
 
 // forward declarations are provided in parser.h
-
-<<<<<<< HEAD
-=======
-
->>>>>>> main
 // ----- parsing helpers -----
 void Parser::parse_tasks_section() {
     expect(TASKS);
@@ -112,11 +104,7 @@ void Parser::parse_poly_section() {
         p.body = term_list();
         expect(SEMICOLON);
         polys.push_back(p);
-<<<<<<< HEAD
         poly_map[p.name] = polys.size() - 1;
-=======
-        poly_map[p.name] = &polys.back();
->>>>>>> main
         current_poly_vars.clear();
         current_poly_line = 0;
         t = lexer.peek(1);
@@ -126,12 +114,9 @@ void Parser::parse_poly_section() {
 void Parser::parse_execute_section() {
     expect(EXECUTE);
     Token t = lexer.peek(1);
-<<<<<<< HEAD
     if (!(t.token_type == INPUT || t.token_type == OUTPUT || t.token_type == ID)) {
         syntax_error();
     }
-=======
->>>>>>> main
     while (t.token_type == INPUT || t.token_type == OUTPUT || t.token_type == ID) {
         Statement s;
         if (t.token_type == INPUT) {
@@ -297,7 +282,6 @@ Expr* Parser::poly_evaluation() {
 
 Expr* Parser::argument() {
     Token t1 = lexer.peek(1);
-<<<<<<< HEAD
     if (t1.token_type == NUM) {
         Token num = expect(NUM);
         Expr* node = new Expr(Expr::NUM);
@@ -305,8 +289,6 @@ Expr* Parser::argument() {
         node->line_no = num.line_no;
         return node;
     }
-=======
->>>>>>> main
     if (t1.token_type != ID) {
         syntax_error();
     }
@@ -342,12 +324,8 @@ int Parser::eval_expr(Expr* e, map<string,int>& env) {
             return res;
         }
         case Expr::CALL: {
-            if (poly_map.find(e->name) == poly_map.end()) return 0;
-<<<<<<< HEAD
+    if (poly_map.find(e->name) == poly_map.end()) return 0;
             Polynomial *p = &polys[poly_map[e->name]];
-=======
-            Polynomial *p = poly_map[e->name];
->>>>>>> main
             map<string,int> newEnv;
             if (p->params.empty()) {
                 newEnv["x"] = eval_expr(e->args[0], env);

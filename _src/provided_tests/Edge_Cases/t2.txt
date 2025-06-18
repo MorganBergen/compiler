@@ -1,0 +1,10 @@
+TASKS
+    2 5
+POLY
+    F(x) = (x + 1)^0;
+EXECUTE
+    INPUT A;
+    A = F(A);
+    OUTPUT A;
+INPUTS
+    5

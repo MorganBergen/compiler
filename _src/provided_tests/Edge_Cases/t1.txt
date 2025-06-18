@@ -1,0 +1,8 @@
+TASKS
+    2 5
+POLY
+EXECUTE
+    INPUT X;
+    OUTPUT X;
+INPUTS
+    42

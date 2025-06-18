@@ -58,7 +58,9 @@ class Parser {
         void check_semantics();
         void check_warning1();
         void check_warning2();
+        // compute degree of a polynomial expression
         int degree_expr(Expr* e);
+        int degree_expr(Expr* e, std::map<std::string,int>& env);
         void print_degrees();
 
         // program data

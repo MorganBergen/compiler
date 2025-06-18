@@ -195,6 +195,53 @@ argument -> ID
 argument -> poly_evaluation
 inputs_section -> INPUTSnum_list
 ```
+```
+program → tasks_sectionpoly_sectionexecute_sectioninputs_section
+tasks_section → TASKSnum_list
+num_list → NUM
+num_list → NUMnum_list
+poly_section → POLYpoly_decl_list
+poly_dec_list → poly_decl
+poly_dec_list → poly_declpoly_dec_list
+poly_decl → poly_headerEQUALpoly_bodySEMICOLON
+poly_header → poly_name
+poly_header → poly_nameLPARENid_listRPAREN
+id_list → ID
+id_list → IDCOMMAid_list
+poly_name → ID
+poly_body → term_list
+term_list → term
+term_list → termadd_operatorterm_list
+term → monomial_list
+term → coefficientmonomial_list
+term → coefficient
+monomial_list → monomial
+monomial_list → monomialmonomial_list
+monomial → primary
+monomial → primaryexponent
+primary → ID
+primary → LPARENterm_listRPAREN
+exponent → POWERNUM
+add_operator → PLUS
+add_operator → MINUS
+coefficient → NUM
+execute_section → EXECUTEstatement_list
+statement_list → statement
+statement_list → statementstatement_list
+statement → input_statement
+statement → output_statement
+statement → assign_statement
+input_statement → INPUTIDSEMICOLON
+output_statement → OUTPUTIDSEMICOLON
+assign_statement → IDEQUALpoly_evaluationSEMICOLON
+poly_evaluation → poly_nameLPARENargument_listRPAREN
+argument_list → argument
+argument_list → argumentCOMMAargument_list
+argument → ID
+argument → NUM
+argument → poly_evaluation
+inputs_section → INPUTSnum_list
+```
 
 ####  tokens
 

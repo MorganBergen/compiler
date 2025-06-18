@@ -244,6 +244,10 @@ Expr* Parser::monomial() {
 Expr* Parser::primary(const vector<string>& vars, int pline) {
     Token t = lexer.peek(1);
     if (t.token_type == ID) {
+        Token t2 = lexer.peek(2);
+        if (t2.token_type == LPAREN && poly_map.find(t.lexeme) != poly_map.end()) {
+            return poly_evaluation();
+        }
         Token id = expect(ID);
         Expr* node = new Expr(Expr::VAR);
         node->name = id.lexeme;
@@ -303,6 +307,12 @@ Expr* Parser::argument() {
         Expr* node = new Expr(Expr::VAR);
         node->name = id.lexeme;
         node->line_no = id.line_no;
+        if (current_poly_line != 0) {
+            bool ok = false;
+            for (const string &v : current_poly_vars) if (v == id.lexeme) ok = true;
+            if (current_poly_vars.empty() && id.lexeme == "x") ok = true;
+            if (!ok) error2_lines.push_back(id.line_no);
+        }
         return node;
     }
 }

@@ -470,22 +470,47 @@ void Parser::check_warning2() {
 }
 
 // ----- degree computation -----
-int Parser::degree_expr(Expr* e) {
+int Parser::degree_expr(Expr* e, std::map<std::string,int>& env) {
     switch (e->type) {
         case Expr::NUM:
             return 0;
-        case Expr::VAR:
+        case Expr::VAR: {
+            auto it = env.find(e->name);
+            if (it != env.end()) return it->second;
             return 1;
+        }
         case Expr::ADD:
         case Expr::SUB:
-            return max(degree_expr(e->args[0]), degree_expr(e->args[1]));
+            return std::max(degree_expr(e->args[0], env),
+                            degree_expr(e->args[1], env));
         case Expr::MUL:
-            return degree_expr(e->args[0]) + degree_expr(e->args[1]);
+            return degree_expr(e->args[0], env) +
+                   degree_expr(e->args[1], env);
         case Expr::POW:
-            return degree_expr(e->args[0]) * e->value;
+            return degree_expr(e->args[0], env) * e->value;
+        case Expr::CALL: {
+            if (poly_map.find(e->name) == poly_map.end()) return 0;
+            Polynomial *p = &polys[poly_map[e->name]];
+            std::map<std::string,int> new_env;
+            if (p->params.empty()) {
+                int arg_deg = degree_expr(e->args[0], env);
+                new_env["x"] = arg_deg;
+            } else {
+                for (size_t i = 0; i < p->params.size() && i < e->args.size(); i++) {
+                    int arg_deg = degree_expr(e->args[i], env);
+                    new_env[p->params[i]] = arg_deg;
+                }
+            }
+            return degree_expr(p->body, new_env);
+        }
         default:
             return 0;
     }
+}
+
+int Parser::degree_expr(Expr* e) {
+    std::map<std::string,int> env;
+    return degree_expr(e, env);
 }
 
 void Parser::print_degrees() {
